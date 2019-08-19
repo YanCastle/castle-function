@@ -63,16 +63,23 @@ export function array_tree(arr: any[], config: { pfield: string, ufield: string,
     //无限层级怎么算？
     return rs;
 }
-// let rs = array_tree([
-//     { PID: 5, ID: 6 },
-//     { PID: 2, ID: 4 },
-//     { PID: 0, ID: 1 },
-//     { PID: 0, ID: 2 },
-//     { PID: 2, ID: 3 },
-//     { PID: 4, ID: 5 },
-//     { PID: 4, ID: 7 },
-//     { PID: 4, ID: 9 },
-//     { PID: 9, ID: 10 },
-//     { PID: 10, ID: 15 },
-// ])  
-// debugger
+
+const delays: { [index: string]: { i: number, cb: Function } } = {}
+/**
+ * 延迟方法
+ * @param name 延迟名称
+ * @param tout 延时时间
+ * @param cb 回调函数
+ */
+export function delay_cb(name: string, tout: number, cb: Function) {
+    if (!delays[name]) {
+        delays[name] = { i: 1, cb }
+    } else {
+        delays[name].i++;
+    }
+    setTimeout(() => {
+        if (0 == --delays[name].i) {
+            cb();
+        }
+    }, tout)
+}
