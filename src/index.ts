@@ -61,7 +61,7 @@ export function array_tree(arr: any[], config: { pfield: string, ufield: string,
         }
     }
     //无限层级怎么算？
-    return rs;
+    return Object.values(rs);
 }
 
 const delays: { [index: string]: { i: number, cb: Function } } = {}
