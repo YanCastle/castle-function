@@ -51,12 +51,15 @@ export function array_key_set(arr: Object | Object[], column: string, more: bool
  * @param config 
  * @param pvalue 
  */
-export function array_tree(arr: any[], config: { pfield: string, ufield: string, sub_name: string } = { pfield: 'PID', ufield: 'ID', sub_name: 'Child' }, pvalue = 0) {
+export function array_tree(arr: any[], config: { pfield: string, ufield: string, sub_name: string, remove_null?: boolean } = { pfield: 'PID', ufield: 'ID', sub_name: 'Child', remove_null: false }, pvalue = 0) {
     let rs: any = {};
     for (let i = 0; i < arr.length; i++) {
         let o = arr[i]
         if (o[config.pfield] == pvalue) {
             o[config.sub_name] = array_tree(arr, config, o[config.ufield]);
+            if (config.remove_null && o[config.sub_name].length == 0) {
+                delete o[config.sub_name];
+            }
             rs[o[config.ufield]] = o;
         }
     }
