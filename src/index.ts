@@ -86,3 +86,34 @@ export function delay_cb(name: string, tout: number, cb: Function) {
         }
     }, tout)
 }
+
+/**
+ * 延时
+ * @param time
+ */
+export function delay(time = 1000) {
+    return new Promise((s) => { setTimeout(s, time); });
+}
+/**
+ * 延时
+ * @param time
+ */
+export function timeout(time = 1000) {
+    return delay(time);
+}
+/**
+ * uuid
+ * @param key
+ */
+export function uuid(key = '') {
+    let s: any = [];
+    let hexDigits = "0123456789abcdef";
+    for (let i = 0; i < 36; i++) {
+        s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1);
+    }
+    s[14] = "4";
+    s[19] = hexDigits.substr((s[19] & 0x3) | 0x8, 1);
+    s[8] = s[13] = s[18] = s[23] = "-";
+    return s.join("");
+}
+//# sourceMappingURL=index.js.map
