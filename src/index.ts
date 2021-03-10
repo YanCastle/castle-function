@@ -86,11 +86,11 @@ export function delay_cb(name: string, tout: number, cb: Function) {
         delays[name].i++;
     }
     if (tout != delays[name].tout) {
-        --delays[name].i
+        delays[name].i = 1
         clearTimeout(delays[name].t)
     }
     delays[name].t = setTimeout(() => {
-        if (0 == --delays[name].i) {
+        if (0 <= --delays[name].i) {
             cb();
         }
     }, tout);
