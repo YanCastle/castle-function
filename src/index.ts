@@ -67,7 +67,7 @@ export function array_tree(arr: any[], config: { pfield: string, ufield: string,
     return Object.values(rs);
 }
 
-const delays: { [index: string]: { i: number, cb: Function } } = {}
+const delays: { [index: string]: { i: number, cb: Function, t: any, tout: any } } = {}
 /**
  * 延迟方法
  * @param name 延迟名称
@@ -76,15 +76,24 @@ const delays: { [index: string]: { i: number, cb: Function } } = {}
  */
 export function delay_cb(name: string, tout: number, cb: Function) {
     if (!delays[name]) {
-        delays[name] = { i: 1, cb }
+        delays[name] = {
+            i: 1,
+            cb,
+            tout,
+            t: -1
+        };
     } else {
         delays[name].i++;
     }
-    setTimeout(() => {
+    if (tout != delays[name].tout) {
+        --delays[name].i
+        clearTimeout(delays[name].t)
+    }
+    delays[name].t = setTimeout(() => {
         if (0 == --delays[name].i) {
             cb();
         }
-    }, tout)
+    }, tout);
 }
 
 /**
