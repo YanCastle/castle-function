@@ -90,7 +90,7 @@ export function delay_cb(name: string, tout: number, cb: Function) {
         clearTimeout(delays[name].t)
     }
     delays[name].t = setTimeout(() => {
-        if (0 <= --delays[name].i) {
+        if (--delays[name].i <= 0) {
             cb();
         }
     }, tout);
