@@ -80,7 +80,7 @@ export function array_tree(arr: any[], config: { pfield: string, ufield: string,
                     parr.splice(_.findIndex(parr, { [config.ufield]: o[config.ufield] }), 1)
                 }
                 // for(let )
-                rb.push(Object.assign({ [config.sub_name]: [p] }, x))
+                rb.push(Object.assign({ [config.sub_name]: p }, x))
             }
             else {
                 rb.push(x)
