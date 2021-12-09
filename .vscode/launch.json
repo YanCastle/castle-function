@@ -3,14 +3,16 @@
     // Hover to view descriptions of existing attributes.
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
-    "configurations": [{
-        "type": "node",
-        "request": "launch",
-        "name": "Launch Program",
-        "program": "${workspaceFolder}/dist/index.js",
-        "cwd": "${workspaceFolder}",
-        "outFiles": [
-            "${workspaceFolder}/**/*.js"
-        ]
-    }]
+    "configurations": [
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "TestFunction",
+            "program": "${workspaceFolder}/dist/test.js",
+            "cwd": "${workspaceFolder}",
+            "outFiles": [
+                "${workspaceFolder}/**/*.js"
+            ]
+        }
+    ]
 }
