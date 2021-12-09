@@ -1,6 +1,6 @@
 {
   "name": "@ctsy/common",
-  "version": "1.0.4",
+  "version": "1.0.6",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
@@ -16,7 +16,8 @@
   },
   "license": "MIT",
   "dependencies": {
-    "lodash": "^4.17.15"
+    "lodash": "*",
+    "moment": "*"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.119"
