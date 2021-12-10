@@ -57,13 +57,13 @@ export function array_tree(arr: any[], config: { pfield: string, ufield: string,
     for (let o of arr) {
         if (o[config.pfield] == pvalue) {
             o[config.sub_name] = array_tree(parr, config, o[config.ufield]);
-            if (config.remove_null && o[config.sub_name].length == 0) {
-                delete o[config.sub_name];
-            }
             if (o[config.sub_name].length > 0) {
                 for (let p of o[config.sub_name]) {
                     parr.splice(_.findIndex(parr, { [config.ufield]: p[config.ufield] }), 1)
                 }
+            }
+            if (config.remove_null && o[config.sub_name].length == 0) {
+                delete o[config.sub_name];
             }
             rs[o[config.ufield]] = o;
         }
