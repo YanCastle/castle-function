@@ -52,43 +52,31 @@ export function array_key_set(arr: Object | Object[], column: string, more: bool
  * @param pvalue 
  */
 export function array_tree(arr: any[], config: { pfield: string, ufield: string, sub_name: string, remove_null?: boolean, root?: boolean } = { pfield: 'PID', ufield: 'ID', sub_name: 'Child', remove_null: false }, pvalue = 0) {
-    let rs: any = {}, parr = [...arr], troot = config.root;
-    config.root = false;
-    for (let o of arr) {
-        if (o[config.pfield] == pvalue) {
-            o[config.sub_name] = array_tree(parr, config, o[config.ufield]);
-            if (o[config.sub_name].length > 0) {
-                for (let p of o[config.sub_name]) {
-                    parr.splice(_.findIndex(parr, { [config.ufield]: p[config.ufield] }), 1)
+    let parr = [...arr]
+    config.root = false
+    let ufs = array_key_set(parr, config.pfield, true),
+        usedPIDs: number[] = [], n = 0;
+    while (n++ < 1000) {
+        let nPIDs = [...usedPIDs]
+        for (let k in ufs) {
+            let x = ufs[k]
+            for (let o of x) {
+                if (ufs[o[config.ufield]]) {
+                    if (!usedPIDs.includes(o[config.ufield]))
+                        usedPIDs.push(o[config.ufield])
+                    o[config.sub_name] = ufs[o[config.ufield]]
+                } else if (!config.remove_null) {
+                    o[config.sub_name] = []
                 }
             }
-            if (config.remove_null && o[config.sub_name].length == 0) {
-                delete o[config.sub_name];
+        }
+        if (nPIDs.length == usedPIDs.length) {
+            for (let x of nPIDs) {
+                delete ufs[x]
             }
-            rs[o[config.ufield]] = o;
+            return Object.values(ufs);
         }
     }
-    config.root = troot
-    let rb = Object.values(rs);
-    if (arr.length > 0 && rb.length == 0 && config.root === undefined) {
-        // 不是从根级别的树形结构，
-        config.root = false
-        for (let x of parr) {
-            let p: any[] = array_tree(parr, config, x[config.ufield])
-            if (p.length > 0) {
-                for (let o of p) {
-                    parr.splice(_.findIndex(parr, { [config.ufield]: o[config.ufield] }), 1)
-                }
-                // for(let )
-                rb.push(Object.assign({ [config.sub_name]: p }, x))
-            }
-            else {
-                rb.push(x)
-            }
-        }
-    }
-    //无限层级怎么算？
-    return rb
 }
 
 const delays: { [index: string]: { i: number, cb: Function, t: any, tout: any } } = {}
