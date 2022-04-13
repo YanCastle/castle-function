@@ -1,4 +1,78 @@
 import * as _ from 'lodash'
+import * as day from 'dayjs'
+
+declare let window: any
+const YMD = 'YYYY-MM-DD'
+/**
+ * 默认的日期格式
+ */
+export const DateFMT = {
+    /**
+     * 年月日
+     */
+    YMD: YMD,
+    YMDHm: YMD + ' HH:mm',
+    YMDHms: YMD + ' HH:mm:ss'
+}
+export function format_date(date: string | number | Date, fmt: string = DateFMT.YMDHm) {
+    return day(date).format(fmt)
+}
+
+/**
+ * base64 to File
+ * @param dataurl
+ * @param filename
+ */
+export function dataurl_to_file(dataurl: string, filename: string): File | undefined {
+    //将base64转换为文件
+    if ("string" == typeof dataurl && dataurl.length > 0) {
+        var arr: any[] = dataurl.split(","),
+            mime = arr[0].match(/:(.*?);/)[1],
+            bstr = atob(arr[1]),
+            n = bstr.length,
+            u8arr = new Uint8Array(n);
+        while (n--) {
+            u8arr[n] = bstr.charCodeAt(n);
+        }
+        return new File([u8arr], filename, { type: mime });
+    }
+    throw new Error("非法DataURL")
+}
+
+/**
+ * 数组比较，同时返回不在A中的和不在B中的和两边都在的
+ * @param a
+ * @param b
+ * @returns
+ */
+export function compare_array<T>(a: T[], b: T[]) {
+    let rs: { Both: T[]; NotA: T[]; NotB: T[] } = {
+        Both: _.intersection(a, b),
+        NotA: _.difference(b, a),
+        NotB: _.difference(a, b)
+    }
+    return rs
+}
+/**
+ * 加载脚本
+ * @param url 
+ * @param check 
+ * @returns 
+ */
+export async function load_script(url: string, check: string) {
+    if (window[check]) {
+        return window[check]
+    }
+    let scr = document.createElement('script')
+    scr.src = url
+    document.body.appendChild(scr)
+    while (true) {
+        await timeout(100)
+        if (window[check]) {
+            return window[check]
+        }
+    }
+}
 /**
  * 仿造php的array_columns函数
  * @param arr
@@ -19,13 +93,7 @@ export function array_columns(arr: any, column: string, unique = false) {
     return a;
 }
 
-/**
- * 取唯一值
- * @param arr
- */
-export function array_unique(arr: string[] | any) {
-    return _.uniq(arr)
-}
+
 /**
  * 设置对象中的某个键的值为对象的键
  * @param arr 
