@@ -121,6 +121,14 @@ export function array_key_set(arr: Object | Object[], column: string, more: bool
  */
 export function array_tree(arr: any[], config: { pfield: string, ufield: string, sub_name: string, remove_null?: boolean, root?: boolean } = { pfield: 'PID', ufield: 'ID', sub_name: 'Child', remove_null: false }, pvalue = 0) {
     let parr = [...arr]
+    if (config.root) {
+        for (let x of parr) {
+            if (x[config.ufield] == x[config.pfield]) {
+                console.warn('Duplex ID & PID', x)
+                x[config.pfield] = 0
+            }
+        }
+    }
     config.root = false
     let ufs = array_key_set(parr, config.pfield, true),
         usedPIDs: number[] = [], n = 0;
