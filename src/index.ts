@@ -150,9 +150,13 @@ export function array_tree(arr: any[], config: { pfield: string, ufield: string,
             for (let x of nPIDs) {
                 delete ufs[x]
             }
-            let p = Object.values(ufs);
-            if (p.length == 1) { return p[0] }
-            return p;
+            let p: any[] = Object.values(ufs), rp = [];
+            for (let x of p) {
+                rp.push(...x)
+            }
+            return rp;
+            // if (p.length == 1) { return p[0] }
+            // return p;
         }
     }
 }
